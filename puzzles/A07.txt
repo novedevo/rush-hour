@@ -1,0 +1,6 @@
+.ABBCD
+.A.ECD
+.XXE.F
+..II.F
+...H..
+...H..
