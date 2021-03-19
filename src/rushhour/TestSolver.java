@@ -10,13 +10,13 @@ public class TestSolver {
     public static void main(String[] args) {
         multiTest();
 
-        //singleTest();
+//        singleTest("A09");
 
         System.exit(0);
     }
 
-    private static void singleTest() {
-        System.out.println(Solver.solveFromFile("puzzles/INSTASOLVE.txt", ""));
+    private static void singleTest(String filename) {
+        Solver.solveFromFile("puzzles/" + filename + ".txt", "generated_solutions/" + filename + ".txt");
     }
 
     private static void multiTest() {
@@ -31,12 +31,11 @@ public class TestSolver {
 
             es.execute(() -> {
                 failedPuzzles.add(puzzle.getName());
-                String placeholder = "";
-                if (Solver.solveFromFile(puzzle.getPath(), placeholder)) {
-                    System.out.println("Solved " + puzzle);
-                } else {
-                    System.out.println("Couldn't solve " + puzzle);
-                }
+                Solver.solveFromFile(puzzle.getPath(), "generated_solutions/" + puzzle.getName());
+//                    System.out.println("Solved " + puzzle);
+//                } else {
+//                    System.out.println("Couldn't solve " + puzzle);
+//                }
                 failedPuzzles.remove(puzzle.getName());
             });
         }

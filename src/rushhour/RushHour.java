@@ -115,18 +115,34 @@ public class RushHour {
                     if (pos.x - i >= 0 && boardChars[pos.y][pos.x-i] == '.') {
                         addToMoves(new Point(pos.x-i, pos.y), car, cars, moves);
                     }
-                    else if (pos.x + car.getLength() + i <= 5 && boardChars[pos.y][pos.x + car.getLength() + i] == '.'){
+                    else {
+                        break;
+                    }
+                }
+                for (int i = 1; i <= 3; i++) {
+                    if (pos.x + car.getLength() + i <= 5 && boardChars[pos.y][pos.x + car.getLength() + i ] == '.'){
                         addToMoves(new Point(pos.x+i, pos.y), car, cars, moves);
+                    }
+                    else {
+                        break;
                     }
                 }
             }
             else {
                 for (int i = 1; i <= 3; i++) {
-                    if (pos.y - i >= 0 && boardChars[pos.y-i][pos.x] == '.') {
-                        addToMoves(new Point(pos.x, pos.y-i), car, cars, moves);
+                    if (pos.y - i >= 0 && boardChars[pos.y - i][pos.x] == '.') {
+                        addToMoves(new Point(pos.x, pos.y - i), car, cars, moves);
                     }
-                    else if (pos.y + car.getLength() + i <= 5 && boardChars[pos.y + car.getLength() + i][pos.x] == '.'){
+                    else {
+                        break;
+                    }
+                }
+                for (int i = 1; i <= 3; i++) {
+                    if (pos.y + car.getLength() + i <= 5 && boardChars[pos.y + car.getLength() + i ][pos.x] == '.'){
                         addToMoves(new Point(pos.x, pos.y+i), car, cars, moves);
+                    }
+                    else {
+                        break;
                     }
                 }
             }
@@ -145,6 +161,16 @@ public class RushHour {
     @Override
     public int hashCode() {
         return cars.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        for (var line: boardChars) {
+            out.append(new String(line));
+            out.append("\n");
+        }
+        return out.toString();
     }
 
     public void printRedCar() {
