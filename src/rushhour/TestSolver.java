@@ -8,6 +8,18 @@ import java.util.concurrent.TimeUnit;
 
 public class TestSolver {
     public static void main(String[] args) {
+        multiTest();
+
+        //singleTest();
+
+        System.exit(0);
+    }
+
+    private static void singleTest() {
+        System.out.println(Solver.solveFromFile("puzzles/INSTASOLVE.txt", ""));
+    }
+
+    private static void multiTest() {
         File[] puzzles = new File("puzzles/").listFiles();
         assert puzzles != null;
 
@@ -17,27 +29,29 @@ public class TestSolver {
 
         for (File puzzle : puzzles) {
 
-            es.execute(new Runnable() {
-                @Override
-                public void run() {
-                    failedPuzzles.add(puzzle.getName());
-                    String placeholder = "";
-                    Solver.solveFromFile(puzzle.getPath(), placeholder);
-                    failedPuzzles.remove(puzzle.getName());
+            es.execute(() -> {
+                failedPuzzles.add(puzzle.getName());
+                String placeholder = "";
+                if (Solver.solveFromFile(puzzle.getPath(), placeholder)) {
+                    System.out.println("Solved " + puzzle);
+                } else {
+                    System.out.println("Couldn't solve " + puzzle);
                 }
+                failedPuzzles.remove(puzzle.getName());
             });
         }
 
         try {
-            boolean finished = es.awaitTermination(5, TimeUnit.SECONDS);
+            es.shutdown();
+            boolean finished = es.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         for (String puzzle : failedPuzzles) {
-            System.out.println(puzzle + " has failed to complete within the maximum allotted time of 5 seconds.");
+            System.out.println(puzzle + " was never solved.");
         }
 
-        System.exit(0);
     }
+
 }
