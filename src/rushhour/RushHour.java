@@ -16,11 +16,16 @@ public class RushHour {
     private final char[][] boardChars;
     private final HashSet<Car> cars;
 
+    public int distanceFromRoot;
+    public final int blockingHeuristic;
+
 //    private final Car VICTORY_CAR = new Car(new Point(4, 2), RIGHT, 3, 'X');
 
-    public RushHour(HashSet<Car> newCars) {
+    public RushHour(HashSet<Car> newCars, int distanceFromRoot) {
         this.cars = newCars;
         this.boardChars = generateBoardChars();
+        this.distanceFromRoot = distanceFromRoot;
+        blockingHeuristic = generateBlockingHeuristic();
     }
 
     /**
@@ -60,7 +65,9 @@ public class RushHour {
             }
         }
         boardChars = generateBoardChars();
+        distanceFromRoot = 0;
 
+        blockingHeuristic = generateBlockingHeuristic();
 
     }
 
@@ -113,7 +120,7 @@ public class RushHour {
             if (car.getOrientation() == RIGHT) {
                 for (int i = 1; i <= 3; i++) {
                     if (pos.x - i >= 0 && boardChars[pos.y][pos.x-i] == '.') {
-                        addToMoves(new Point(pos.x-i, pos.y), car, cars, moves);
+                        addToMoves(new Point(pos.x-i, pos.y), car, cars, moves, distanceFromRoot);
                     }
                     else {
                         break;
@@ -121,7 +128,7 @@ public class RushHour {
                 }
                 for (int i = 1; i <= 3; i++) {
                     if (pos.x + car.getLength() + i <= 5 && boardChars[pos.y][pos.x + car.getLength() + i ] == '.'){
-                        addToMoves(new Point(pos.x+i, pos.y), car, cars, moves);
+                        addToMoves(new Point(pos.x+i, pos.y), car, cars, moves, distanceFromRoot);
                     }
                     else {
                         break;
@@ -131,7 +138,7 @@ public class RushHour {
             else {
                 for (int i = 1; i <= 3; i++) {
                     if (pos.y - i >= 0 && boardChars[pos.y - i][pos.x] == '.') {
-                        addToMoves(new Point(pos.x, pos.y - i), car, cars, moves);
+                        addToMoves(new Point(pos.x, pos.y - i), car, cars, moves, distanceFromRoot);
                     }
                     else {
                         break;
@@ -139,7 +146,7 @@ public class RushHour {
                 }
                 for (int i = 1; i <= 3; i++) {
                     if (pos.y + car.getLength() + i <= 5 && boardChars[pos.y + car.getLength() + i ][pos.x] == '.'){
-                        addToMoves(new Point(pos.x, pos.y+i), car, cars, moves);
+                        addToMoves(new Point(pos.x, pos.y+i), car, cars, moves, distanceFromRoot);
                     }
                     else {
                         break;
@@ -173,15 +180,15 @@ public class RushHour {
         return out.toString();
     }
 
-    public void printRedCar() {
-        for (Car car: cars) {
-            if (car.getColour() == 'X') {
-                System.out.println(car.getPos());
-            }
-        }
-    }
+//    public void printRedCar() {
+//        for (Car car: cars) {
+//            if (car.getColour() == 'X') {
+//                System.out.println(car.getPos());
+//            }
+//        }
+//    }
 
-    public static void addToMoves(Point newPoint, Car car, HashSet<Car> cars, ArrayList<RushHour> moves) {
+    public static void addToMoves(Point newPoint, Car car, HashSet<Car> cars, ArrayList<RushHour> moves, int distanceFromRoot) {
         Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
         HashSet<Car> newCars = new HashSet<>();
         for (Car oldCar: cars) {
@@ -192,7 +199,7 @@ public class RushHour {
                 newCars.add(oldCar);
             }
         }
-        moves.add(new RushHour(newCars));
+        moves.add(new RushHour(newCars, distanceFromRoot+1));
     }
 
     /**
@@ -216,6 +223,16 @@ public class RushHour {
             }
         }
         return tempBoard;
+    }
+
+    private int generateBlockingHeuristic() {
+        int h = 0;
+        for (int i = 2; i < 6; i++) {
+            if (boardChars[2][i] != 'X' && boardChars[2][i] != '.'){
+                h++;
+            }
+        }
+        return h;
     }
 
     /**

@@ -12,7 +12,7 @@ public class TestSolver {
 
 //        singleTest("A09");
 
-        System.exit(0);
+//        System.exit(0);
     }
 
     private static void singleTest(String filename) {
@@ -49,6 +49,9 @@ public class TestSolver {
 
         for (String puzzle : failedPuzzles) {
             System.out.println(puzzle + " was never solved.");
+        }
+        if (failedPuzzles.isEmpty()) {
+            System.out.println("All puzzles were successfully solved!");
         }
 
     }
