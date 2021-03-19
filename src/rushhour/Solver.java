@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class Solver {
@@ -20,10 +19,10 @@ public class Solver {
     }
 
     public static RushHour solve(RushHour board) {
-        return breadthFirstSearch(board);
+        return aStar(board);
     }
 
-    public static RushHour breadthFirstSearch(RushHour board) {
+    public static RushHour aStar(RushHour board) {
         if (board.isSolved()) return board;
 
         HashSet<RushHour> visited = new HashSet<>();
