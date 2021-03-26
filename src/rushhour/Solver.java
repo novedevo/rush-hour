@@ -30,23 +30,18 @@ public class Solver {
 
         PriorityQueue<RushHour> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.blockingHeuristic));
         queue.add(board);
-//        int i = 0;
         while (!queue.isEmpty()){
             board = queue.poll();
             for (RushHour newBoard : board.moves()) {
                 if (newBoard.isSolved()) {
                     return newBoard;
                 }
-//                newBoard.printRedCar();
                 if (!visited.contains(newBoard)){
                     visited.add(newBoard);
                     queue.add(newBoard);
                 }
             }
-//            if (i%100 == 0) {
-//                System.out.println(i);
-//            }
-//            i++;
+
         }
         return null;
     }
