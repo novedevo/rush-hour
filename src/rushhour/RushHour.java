@@ -13,18 +13,18 @@ public class RushHour {
     public final static int SIZE = 6;
 
     private final char[][] boardChars;
-    private final HashSet<Car> cars;
+    private final ArrayList<Car> cars;
 
-    public int distanceFromRoot;
-    public final int blockingHeuristic;
+//    public int distanceFromRoot;
+//    public final int blockingHeuristic;
 
 //    private final Car VICTORY_CAR = new Car(new Point(4, 2), RIGHT, 3, 'X');
 
-    public RushHour(HashSet<Car> newCars, int distanceFromRoot) {
+    public RushHour(ArrayList<Car> newCars) {
         this.cars = newCars;
         this.boardChars = generateBoardChars();
-        this.distanceFromRoot = distanceFromRoot;
-        blockingHeuristic = generateBlockingHeuristic();
+//        this.distanceFromRoot = distanceFromRoot;
+//        blockingHeuristic = generateBlockingHeuristic();
     }
 
     /**
@@ -35,9 +35,9 @@ public class RushHour {
 
         Scanner boardScanner = new Scanner(new File(fileName));
         var tempChars = new char[SIZE][SIZE];
-        cars = new HashSet<>();
+        cars = new ArrayList<>();
 
-        Set<Character> colours = new HashSet<>();
+        HashSet<Character> colours = new HashSet<>();
         colours.add('.');
 
         int lineIndex = 0;
@@ -64,9 +64,9 @@ public class RushHour {
             }
         }
         boardChars = generateBoardChars();
-        distanceFromRoot = 0;
+//        distanceFromRoot = 0;
 
-        blockingHeuristic = generateBlockingHeuristic();
+//        blockingHeuristic = generateBlockingHeuristic();
 
     }
 
@@ -117,17 +117,17 @@ public class RushHour {
         for (Car car: cars) {
             var pos = car.getPos();
             if (car.getOrientation() == RIGHT) {
-                for (int i = 1; i <= 3; i++) {
+                for (int i = 1; i <= 4; i++) {
                     if (pos.x - i >= 0 && boardChars[pos.y][pos.x-i] == '.') {
-                        addToMoves(new Point(pos.x-i, pos.y), car, cars, moves, distanceFromRoot);
+                        addToMoves(new Point(pos.x-i, pos.y), car, cars, moves);
                     }
                     else {
                         break;
                     }
                 }
-                for (int i = 1; i <= 3; i++) {
+                for (int i = 1; i <= 4; i++) {
                     if (pos.x + car.getLength() + i <= 5 && boardChars[pos.y][pos.x + car.getLength() + i ] == '.'){
-                        addToMoves(new Point(pos.x+i, pos.y), car, cars, moves, distanceFromRoot);
+                        addToMoves(new Point(pos.x+i, pos.y), car, cars, moves);
                     }
                     else {
                         break;
@@ -135,17 +135,17 @@ public class RushHour {
                 }
             }
             else {
-                for (int i = 1; i <= 3; i++) {
+                for (int i = 1; i <= 4; i++) {
                     if (pos.y - i >= 0 && boardChars[pos.y - i][pos.x] == '.') {
-                        addToMoves(new Point(pos.x, pos.y - i), car, cars, moves, distanceFromRoot);
+                        addToMoves(new Point(pos.x, pos.y - i), car, cars, moves);
                     }
                     else {
                         break;
                     }
                 }
-                for (int i = 1; i <= 3; i++) {
+                for (int i = 1; i <= 4; i++) {
                     if (pos.y + car.getLength() + i <= 5 && boardChars[pos.y + car.getLength() + i ][pos.x] == '.'){
-                        addToMoves(new Point(pos.x, pos.y+i), car, cars, moves, distanceFromRoot);
+                        addToMoves(new Point(pos.x, pos.y+i), car, cars, moves);
                     }
                     else {
                         break;
@@ -187,9 +187,9 @@ public class RushHour {
 //        }
 //    }
 
-    public static void addToMoves(Point newPoint, Car car, HashSet<Car> cars, ArrayList<RushHour> moves, int distanceFromRoot) {
+    public static void addToMoves(Point newPoint, Car car, ArrayList<Car> cars, ArrayList<RushHour> moves) {
         Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
-        HashSet<Car> newCars = new HashSet<>();
+        ArrayList<Car> newCars = new ArrayList<>();
         for (Car oldCar: cars) {
             if (newCar.getColour() == oldCar.getColour()){
                 newCars.add(newCar);
@@ -198,7 +198,7 @@ public class RushHour {
                 newCars.add(oldCar);
             }
         }
-        moves.add(new RushHour(newCars, distanceFromRoot+1));
+        moves.add(new RushHour(newCars));
     }
 
     /**

@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 public class TestSolver {
     public static void main(String[] args) {
-//        multiTest();
+        multiTest();
 
-        singleTest("A00");
+//        singleTest("A00");
 
 //        System.exit(0);
     }
