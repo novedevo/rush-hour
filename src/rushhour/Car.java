@@ -14,7 +14,6 @@ public class Car {
         this.pos = pos;
         this.orientation = orientation;
         this.length = length;
-
         this.colour = colour;
     }
 

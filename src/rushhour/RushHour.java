@@ -283,4 +283,41 @@ public class RushHour {
         }
         return length;
     }
+
+    /**
+     * @param startBoard    Board to start at
+     * @param endBoard      Board to end at
+     *                      Returns the step taken between the two boards
+     *                      Ex: ['X','R','1'] would mean X was moved to the right by 1
+     */
+    public char[] boardDiff(RushHour startBoard, RushHour endBoard) {
+        var step = new char[3];
+        if (startBoard.equals(endBoard)) { step[0] = 'X';step[1] = 'R';step[2] = '0'; }     //if the boards did not change, return this default
+        else {
+            for (int i = 0; i < startBoard.cars.size(); i++){           //iterate through cars
+                Point startCarPos = startBoard.cars.get(i).getPos();
+                Point endCarPos = endBoard.cars.get(i).getPos();
+                if (startCarPos != endCarPos) {                         //when the car that moved is found
+                    step[0] = startBoard.cars.get(i).getColour();       //determine which colour it is
+                    if (endCarPos.x - startCarPos.x > 0) {              //determine by how much it moved and in which direction
+                        step[1] = 'R';
+                        step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x));
+                    }
+                    else if (endCarPos.x - startCarPos.x < 0) {
+                        step[1] = 'L';
+                        step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x));
+                    }
+                    else if (endCarPos.y - startCarPos.y > 0) {
+                        step[1] = 'D';
+                        step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y));
+                    }
+                    else if (endCarPos.y - startCarPos.y < 0) {
+                        step[1] = 'U';
+                        step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y));
+                    }
+                }
+            }
+        }
+        return step;
+    }
 }
