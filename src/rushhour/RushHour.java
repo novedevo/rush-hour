@@ -291,29 +291,27 @@ public class RushHour {
      */
     public char[] boardDiff(RushHour endBoard) {
         var step = new char[3];
-        if (this.equals(endBoard)) { step[0] = 'X';step[1] = 'R';step[2] = '0'; }     //if the boards did not change, return this default
-        else {
-            for (int i = 0; i < this.cars.size(); i++){         //iterate through cars
-                Point startCarPos = this.cars.get(i).getPos();
-                Point endCarPos = endBoard.cars.get(i).getPos();
-                if (startCarPos != endCarPos) {                 //when the car that moved is found
-                    step[0] = this.cars.get(i).getColour();     //determine which colour it is
-                    if (endCarPos.x - startCarPos.x > 0) {      //determine by how much it moved and in which direction
-                        step[1] = 'R';
-                        step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x));
-                    }
-                    else if (endCarPos.x - startCarPos.x < 0) {
-                        step[1] = 'L';
-                        step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x));
-                    }
-                    else if (endCarPos.y - startCarPos.y > 0) {
-                        step[1] = 'D';
-                        step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y));
-                    }
-                    else if (endCarPos.y - startCarPos.y < 0) {
-                        step[1] = 'U';
-                        step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y));
-                    }
+        if (this.equals(endBoard)) throw new IllegalArgumentException();
+        for (int i = 0; i < this.cars.size(); i++){         //iterate through cars
+            Point startCarPos = this.cars.get(i).getPos();
+            Point endCarPos = endBoard.cars.get(i).getPos();
+            if (startCarPos != endCarPos) {                 //when the car that moved is found
+                step[0] = this.cars.get(i).getColour();     //determine which colour it is
+                if (endCarPos.x - startCarPos.x > 0) {      //determine by how much it moved and in which direction
+                    step[1] = 'R';
+                    step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x)+'0');
+                }
+                else if (endCarPos.x - startCarPos.x < 0) {
+                    step[1] = 'L';
+                    step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x)+'0');
+                }
+                else if (endCarPos.y - startCarPos.y > 0) {
+                    step[1] = 'D';
+                    step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y)+'0');
+                }
+                else if (endCarPos.y - startCarPos.y < 0) {
+                    step[1] = 'U';
+                    step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y)+'0');
                 }
             }
         }
