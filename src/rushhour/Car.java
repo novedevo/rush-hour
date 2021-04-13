@@ -17,16 +17,7 @@ public class Car {
         this.colour = colour;
     }
 
-    //TODO: comment
-    public void move(int dir, int length) throws UnsupportedOperationException {
-        if (dir == orientation) {
-            RushHour.movePoint(pos, orientation, length);
-        } else if (dir % 2 == orientation % 2) {
-            RushHour.movePoint(pos, orientation, -length);
-        } else {
-            throw new UnsupportedOperationException("Incorrect direction in Car.move()");
-        }
-    }
+    //TODO: comments throughout
 
     public final int getOrientation() {
         return orientation;

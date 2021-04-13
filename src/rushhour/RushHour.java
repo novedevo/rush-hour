@@ -15,59 +15,55 @@ public class RushHour {
     private final char[][] boardChars;
     private final ArrayList<Car> cars;
 
-//    public int distanceFromRoot;
-//    public final int blockingHeuristic;
-
-//    private final Car VICTORY_CAR = new Car(new Point(4, 2), RIGHT, 3, 'X');
-
-    public RushHour(ArrayList<Car> newCars) {
+    /**
+     * for internal generation of boards during neighbour state iteration
+     * @param newCars list of cars to generate the board from
+     */
+    private RushHour(ArrayList<Car> newCars) {
         this.cars = newCars;
         this.boardChars = generateBoardChars();
-//        this.distanceFromRoot = distanceFromRoot;
-//        blockingHeuristic = generateBlockingHeuristic();
     }
 
     /**
      * @param fileName Reads a board from file and creates the board
      * @throws Exception if the file not found or the board is bad
+     * Initial constructor for RushHour boards
      */
-    //TODO: comment
     public RushHour(String fileName) throws Exception {
 
         Scanner boardScanner = new Scanner(new File(fileName));
-        var tempChars = new char[SIZE][SIZE];
+        boardChars = new char[SIZE][SIZE];
         cars = new ArrayList<>();
 
         HashSet<Character> colours = new HashSet<>();
-        colours.add('.');
+        colours.add('.'); //to avoid making a fake car from the pavement
 
+        //copy each line of the puzzle file into our char array
         int lineIndex = 0;
         do {
-            tempChars[lineIndex] = (boardScanner.nextLine().toCharArray());
+            boardChars[lineIndex] = (boardScanner.nextLine().toCharArray());
             lineIndex++;
         } while (boardScanner.hasNext());
 
+        //generate our list of cars from the char array
         for (int i = 0; i < SIZE; i++) {
-            char[] line = tempChars[i];
+            char[] line = boardChars[i];
             for (int j = 0; j < SIZE; j++) {
                 char colour = line[j];
 
+                //if this is a new car we have not yet seen
                 if (!colours.contains(colour)) {
                     colours.add(colour);
-                    Point pos = new Point(j, i);
+                    Point pos = new Point(j, i); //seems backwards, but row:column <=> y:x
 
-                    int orientation = determineOrientation(pos, tempChars);
-                    int length = determineLength(pos, orientation, tempChars);
+                    int orientation = determineOrientation(pos, boardChars);
+                    int length = determineLength(pos, orientation, boardChars);
 
                     cars.add(new Car(pos, orientation, length, colour));
 
                 }
             }
         }
-        boardChars = generateBoardChars();
-//        distanceFromRoot = 0;
-
-//        blockingHeuristic = generateBlockingHeuristic();
 
     }
 
@@ -181,13 +177,6 @@ public class RushHour {
         return out.toString();
     }
 
-//    public void printRedCar() {
-//        for (Car car: cars) {
-//            if (car.getColour() == 'X') {
-//                System.out.println(car.getPos());
-//            }
-//        }
-//    }
     //TODO: comment this
     public static void addToMoves(Point newPoint, Car car, ArrayList<Car> cars, ArrayList<RushHour> moves) {
         Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
