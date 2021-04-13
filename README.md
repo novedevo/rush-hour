@@ -5,14 +5,14 @@ _By Devon Burnham and Alexander Mot_
 ### Classes
 In full Java style, our code is separated into classes, each with their own purpose. Below is a short description of why each one is necessary to our project.
 
-#### Car
-The `Car` class makes everyone's lives easier by providing an interface which we can use to access individual cars, rather than searching the char array for cars each time we need to work with them. They hold their position, direction, length, and colour, and have methods to check for victory, generate a hashCode, and compare equality.
+- #### Car
+    The `Car` class makes everyone's lives easier by providing an interface which we can use to access individual cars, rather than searching the char array for cars each time we need to work with them. They hold their position, direction, length, and colour, and have methods to check for victory, generate a hashCode, and compare equality.
 
-#### RushHour
-This class is based on the `RushHour` class from the previous assignment. It contains some constants, a 6x6 `char` array representation of the board, and an `ArrayList` of the cars of which it is composed. It has a couple of constructors, one from a file (for initial construction) and another from a list of `Car`s (for use during move generation).
+- #### RushHour
+    This class is based on the `RushHour` class from the previous assignment. It contains some constants, a 6x6 `char` array representation of the board, and an `ArrayList` of the cars of which it is composed. It has a couple of constructors, one from a file (for initial construction) and another from a list of `Car`s (for use during move generation).
 
-#### Solver
-The `Solver` class, as one would assume, handles everything to do with actually solving the boards. The main function, `solve()`, uses a basic BFS algorithm to move through a graph of valid board states to find a solution, recording the steps along the way. The function `writeToFile()` then handles delivering the solution to the user, both through the console and in solution files.
+- #### Solver
+    The `Solver` class, as one would assume, handles everything to do with actually solving the boards. The main function, `solve()`, uses a basic BFS algorithm to move through a graph of valid board states to find a solution, recording the steps along the way. The function `writeToFile()` then handles delivering the solution to the user, both through the console and in solution files.
 
 ### Data structures
 The primary data structures used in our project have been `Queue`s, `PriorityQueue`s, `Stack`s, and `HashMap`s. `HashMap`s were mostly used to keep track of the visited boards, which required us to implement `hashCode()` and equality comparison functions on the `RushHour` class.
