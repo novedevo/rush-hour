@@ -16,6 +16,7 @@ public class Solver {
         writeToFile(solve(a), output);
     }
 
+    //breadth-first search
     public static ArrayList<char[]> solve(RushHour board) {
         var stepsArrayList = new ArrayList<char[]>();
         if (board.isSolved()) return stepsArrayList;    //if board is already solved, return an empty ArrayList
@@ -58,7 +59,6 @@ public class Solver {
             }
             for (char[] step : steps) {
                 writer.write(String.valueOf(step));
-                System.out.println(String.valueOf(step));
                 writer.newLine();
             }
             writer.flush();
