@@ -1,4 +1,7 @@
-# DOCUMENTATION
+<h1 style="margin:0;padding:0;border:none">Rush Hour Solver</h1>
+<p style="color:#808080">By Devon Burnham and Alexander Mot</p>
+
+***
 
 ## Design decisions
 ### Classes
