@@ -1,19 +1,17 @@
-<h1 style="margin:0;padding:0;border:none">Rush Hour Solver</h1>
-<p style="color:#808080">By Devon Burnham and Alexander Mot</p>
-
-***
+# Rush Hour Solver
+_By Devon Burnham and Alexander Mot_
 
 ## Design decisions
 ### Classes
 In full Java style, our code is separated into classes, each with their own purpose. Below is a short description of why each one is necessary to our project.
 
->#### <b>Car</b>
+>#### Car
 >The `Car` class makes everyone's lives easier by providing an interface which we can use to access individual cars, rather than searching the char array for cars each time we need to work with them. They hold their position, direction, length, and colour, and have methods to check for victory, generate a hashCode, and compare equality.
 
->#### <b>RushHour</b>
+>#### RushHour
 >This class is based on the `RushHour` class from the previous assignment. It contains some constants, a 6x6 `char` array representation of the board, and an `ArrayList` of the cars of which it is composed. It has a couple of constructors, one from a file (for initial construction) and another from a list of `Car`s (for use during move generation).
 
->#### <b>Solver</b>
+>#### Solver
 >The `Solver` class, as one would assume, handles everything to do with actually solving the boards. The main function, `solve()`, uses a basic BFS algorithm to move through a graph of valid board states to find a solution, recording the steps along the way. The function `writeToFile()` then handles delivering the solution to the user, both through the console and in solution files.
 
 ### Data structures
@@ -21,8 +19,6 @@ The primary data structures used in our project have been `Queue`s, `PriorityQue
 
 ### Algorithms
 Initially, a BFS algorithm was used to solve the boards while we worked out the rest of the program. Then, we implemented an A* heuristic-based algorithm (tested with a first-order blocking heuristic), but found that despite the theoretically improved efficiency it actually ran slower than our BFS algorithm, due to the extra time required to calculate the heuristic, and so we moved back to BFS. This automatically provides the shortest possible path to the solution.
-
-***
 
 ## Project History and Division of Labour
 We collaborated heavily on this project, utilizing features such as IntelliJ's "Code With Me" and Visual Studio Code's "Live Share" in order to work synchronously on the same file. For more asynchronous work, we used a shared private GitHub repository and merged our changes when needed. This workflow obfuscates who exactly wrote each line of code, but we feel that the workload was shared equitably between us.
@@ -38,17 +34,14 @@ Initially, we used `HashSet`s to store the list of cars for each `RushHour` boar
 ### Refactoring the Solution Format
 Near the end of the project, we became aware that our previous solution files, which consisted of the final, solved position of the boards, were not as desired: they should have been a list of all the moves necessary to reach the solved state. This refactor meant that we now had to keep track of the steps throughout the program's execution. We found that the easiest way to integrate this with our current flow was to use `HashMap`s, linking a board state with an `ArrayList` of the steps required to reach that state. The `ArrayList` is created by taking the parent's steps, and adding the steps to reach the current state from the parent. To save space, once all children have their `ArrayList`s finalized, the parents are removed from the `HashMap`.
 
-***
 
 ## Performance
 Our `multiTest()` benchmarking function spawns an `Executor` threadpool and runs each individual puzzle concurrently in a lambda function. Running it on a Ryzen 5 3600, this finishes all 35 provided puzzles in less than a second from program start to all files successfully written. This is extremely fast, enough so that we questioned our algorithm, but we verified solution correctness in multiple ways, including checking solved states for sanity and comparing solution steps against the provided solutions. The Rust version of this project is optimized to a higher degree, so if you want flamegraphs, unstable hashers, and callgrind profiling, check that one out.
 
-***
 
 ## Rust
 We also wrote a version of this project in the Rust programming language, which is included (with its own documentation) in its own folder. This side project was an excellent way to learn Rust, and much unnecessary (yet enjoyable) optimization occurred there.
 
-***
 
 ## Conclusions and Lessons Learned
 - Concurrency is powerful
