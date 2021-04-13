@@ -3,7 +3,6 @@ package rushhour;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Solver {
@@ -24,7 +23,7 @@ public class Solver {
         HashSet<RushHour> visited = new HashSet<>();
         visited.add(board);
 
-        Queue<RushHour> queue = new LinkedList<RushHour>();
+        Queue<RushHour> queue = new LinkedList<>();
         queue.add(board);
 
         var map = new HashMap<RushHour, ArrayList<char[]>>();   //create map to link a board with the steps leading to it
@@ -36,7 +35,7 @@ public class Solver {
                 if (!visited.contains(newBoard)){
                     visited.add(newBoard);
                     queue.add(newBoard);
-                    stepsArrayList = new ArrayList<char[]>(map.get(board));   //make a deep clone of the steps to reach board
+                    stepsArrayList = new ArrayList<>(map.get(board));   //make a deep clone of the steps to reach board
                     stepsArrayList.add(board.boardDiff(newBoard));  //add steps to newBoard
                     map.put(newBoard, stepsArrayList);              //add full steps to map for newBoard
                 }
