@@ -31,6 +31,7 @@ public class RushHour {
      * @param fileName Reads a board from file and creates the board
      * @throws Exception if the file not found or the board is bad
      */
+    //TODO: comment
     public RushHour(String fileName) throws Exception {
 
         Scanner boardScanner = new Scanner(new File(fileName));
@@ -112,6 +113,7 @@ public class RushHour {
         return false;
     }
 
+    //TODO: comment this
     public ArrayList<RushHour> moves() {
         ArrayList<RushHour> moves = new ArrayList<>();
         for (Car car: cars) {
@@ -186,7 +188,7 @@ public class RushHour {
 //            }
 //        }
 //    }
-
+    //TODO: comment this
     public static void addToMoves(Point newPoint, Car car, ArrayList<Car> cars, ArrayList<RushHour> moves) {
         Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
         ArrayList<Car> newCars = new ArrayList<>();
