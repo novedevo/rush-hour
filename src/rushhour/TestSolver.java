@@ -9,10 +9,6 @@ import java.util.concurrent.TimeUnit;
 public class TestSolver {
     public static void main(String[] args) {
         multiTest();
-
-//        singleTest("A00");
-
-//        System.exit(0);
     }
 
     private static void singleTest(String filename) {
@@ -32,25 +28,23 @@ public class TestSolver {
             es.execute(() -> {
                 failedPuzzles.add(puzzle.getName());
                 Solver.solveFromFile(puzzle.getPath(), "generated_solutions/" + puzzle.getName());
-//                    System.out.println("Solved " + puzzle);
-//                } else {
-//                    System.out.println("Couldn't solve " + puzzle);
-//                }
                 failedPuzzles.remove(puzzle.getName());
             });
         }
 
+        boolean finished = false;
         try {
-            es.shutdown();
-            boolean finished = es.awaitTermination(10, TimeUnit.SECONDS);
+            es.shutdown(); //declare that it can no longer accept new tasks
+            finished = es.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        //for debugging purposes, we print any puzzles that failed to solve or timed out
         for (String puzzle : failedPuzzles) {
             System.out.println(puzzle + " was never solved.");
         }
-        if (failedPuzzles.isEmpty()) {
+        if (finished && failedPuzzles.isEmpty()) {
             System.out.println("All puzzles were successfully solved!");
         }
 

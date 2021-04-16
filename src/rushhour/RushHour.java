@@ -109,7 +109,11 @@ public class RushHour {
         return false;
     }
 
-    //TODO: comment this
+    /**
+     * calculates all possible moves from this position
+     * akin to getting neighbours in a traditional graph
+     * @return list of all adjacent (neighbouring) boards
+     */
     public ArrayList<RushHour> moves() {
         ArrayList<RushHour> moves = new ArrayList<>();
         for (Car car: cars) {
@@ -154,6 +158,11 @@ public class RushHour {
         return moves;
     }
 
+    /**
+     * equality comparison is required for hashsets
+     * @param o the other object being compared
+     * @return boolean denoting equality
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -177,7 +186,15 @@ public class RushHour {
         return out.toString();
     }
 
-    //TODO: comment this
+    /**
+     * Helper function for RushHour.moves() above
+     * creates new car, from which it creates a list of cars, from which it creates a RushHour board and
+     * adds it to the provided ArrayList
+     * @param newPoint new position of the moved car
+     * @param car the car to be modified
+     * @param cars list of cars from the original board
+     * @param moves list of moves to which the newly constructed board is added
+     */
     public static void addToMoves(Point newPoint, Car car, ArrayList<Car> cars, ArrayList<RushHour> moves) {
         Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
         ArrayList<Car> newCars = new ArrayList<>();
@@ -195,6 +212,7 @@ public class RushHour {
     /**
      * Regenerates the array of characters symbolizing the playing board from positions, directions,
      * and orientations of the cars in the list of cars.
+     * @return 6x6 char array representing the board
      */
     private char[][] generateBoardChars() {
         var tempBoard = new char[SIZE][SIZE];
@@ -213,16 +231,6 @@ public class RushHour {
             }
         }
         return tempBoard;
-    }
-
-    private int generateBlockingHeuristic() {
-        int h = 0;
-        for (int i = 2; i < 6; i++) {
-            if (boardChars[2][i] != 'X' && boardChars[2][i] != '.'){
-                h++;
-            }
-        }
-        return h;
     }
 
     /**
@@ -277,7 +285,7 @@ public class RushHour {
 
     /**
      * @param endBoard      Board to end at
-     *                      Returns the step taken between this board and the end board
+     * @return              the step taken between this board and the end board
      *                      Ex: ['X','R','1'] would mean X was moved to the right by 1
      */
     public char[] boardDiff(RushHour endBoard) {
