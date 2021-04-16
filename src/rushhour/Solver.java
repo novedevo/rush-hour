@@ -19,6 +19,7 @@ public class Solver {
     /**
      * breadth-first search, essentially
      * solves the given puzzle board and outputs the steps needed
+     *
      * @param board the puzzle board to be solved
      * @return list of char arrays denoting the steps required to solve it
      */
@@ -35,17 +36,19 @@ public class Solver {
         var map = new HashMap<RushHour, ArrayList<char[]>>();   //create map to link a board with the steps leading to it
         map.put(board, stepsArrayList);                         //add board to map along with empty ArrayList
 
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             board = queue.poll();
             for (RushHour newBoard : board.moves()) {           //iterate through possible next moves
-                if (!visited.contains(newBoard)){
+                if (!visited.contains(newBoard)) {
                     visited.add(newBoard);
                     queue.add(newBoard);
                     stepsArrayList = new ArrayList<>(map.get(board));   //make a deep clone of the steps to reach board
                     stepsArrayList.add(board.boardDiff(newBoard));  //add steps to newBoard
                     map.put(newBoard, stepsArrayList);              //add full steps to map for newBoard
                 }
-                if (newBoard.isSolved()) { return map.get(newBoard); }
+                if (newBoard.isSolved()) {
+                    return map.get(newBoard);
+                }
             }
             map.remove(board);      //remove parent board from the map once all children have been added
         }
@@ -54,7 +57,8 @@ public class Solver {
 
     /**
      * writes an ArrayList of char arrays to the specified file, with newlines between each array.
-     * @param steps the ArrayList of char arrays to be written
+     *
+     * @param steps    the ArrayList of char arrays to be written
      * @param filename the location to write the file
      */
     public static void writeToFile(ArrayList<char[]> steps, String filename) {

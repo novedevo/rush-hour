@@ -2,7 +2,9 @@ package rushhour;
 
 import java.awt.*;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
 
 public class RushHour {
     public final static int UP = 0;
@@ -17,6 +19,7 @@ public class RushHour {
 
     /**
      * for internal generation of boards during neighbour state iteration
+     *
      * @param newCars list of cars to generate the board from
      */
     private RushHour(ArrayList<Car> newCars) {
@@ -27,7 +30,7 @@ public class RushHour {
     /**
      * @param fileName Reads a board from file and creates the board
      * @throws Exception if the file not found or the board is bad
-     * Initial constructor for RushHour boards
+     *                   Initial constructor for RushHour boards
      */
     public RushHour(String fileName) throws Exception {
 
@@ -97,12 +100,35 @@ public class RushHour {
     }
 
     /**
+     * Helper function for RushHour.moves() above
+     * creates new car, from which it creates a list of cars, from which it creates a RushHour board and
+     * adds it to the provided ArrayList
+     *
+     * @param newPoint new position of the moved car
+     * @param car      the car to be modified
+     * @param cars     list of cars from the original board
+     * @param moves    list of moves to which the newly constructed board is added
+     */
+    public static void addToMoves(Point newPoint, Car car, ArrayList<Car> cars, ArrayList<RushHour> moves) {
+        Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
+        ArrayList<Car> newCars = new ArrayList<>();
+        for (Car oldCar : cars) {
+            if (newCar.getColour() == oldCar.getColour()) {
+                newCars.add(newCar);
+            } else {
+                newCars.add(oldCar);
+            }
+        }
+        moves.add(new RushHour(newCars));
+    }
+
+    /**
      * @return true if and only if the board is solved,
      * i.e., the XX car is touching the right edge of the board
      */
     public boolean isSolved() {
-        for (Car car: cars) {
-            if (car.isVictorious()){
+        for (Car car : cars) {
+            if (car.isVictorious()) {
                 return true;
             }
         }
@@ -112,44 +138,40 @@ public class RushHour {
     /**
      * calculates all possible moves from this position
      * akin to getting neighbours in a traditional graph
+     *
      * @return list of all adjacent (neighbouring) boards
      */
     public ArrayList<RushHour> moves() {
         ArrayList<RushHour> moves = new ArrayList<>();
-        for (Car car: cars) {
+        for (Car car : cars) {
             var pos = car.getPos();
             if (car.getOrientation() == RIGHT) {
                 for (int i = 1; i <= 4; i++) {
-                    if (pos.x - i >= 0 && boardChars[pos.y][pos.x-i] == '.') {
-                        addToMoves(new Point(pos.x-i, pos.y), car, cars, moves);
-                    }
-                    else {
+                    if (pos.x - i >= 0 && boardChars[pos.y][pos.x - i] == '.') {
+                        addToMoves(new Point(pos.x - i, pos.y), car, cars, moves);
+                    } else {
                         break;
                     }
                 }
                 for (int i = 1; i <= 4; i++) {
-                    if (pos.x + car.getLength() + i <= 5 && boardChars[pos.y][pos.x + car.getLength() + i ] == '.'){
-                        addToMoves(new Point(pos.x+i, pos.y), car, cars, moves);
-                    }
-                    else {
+                    if (pos.x + car.getLength() + i <= 5 && boardChars[pos.y][pos.x + car.getLength() + i] == '.') {
+                        addToMoves(new Point(pos.x + i, pos.y), car, cars, moves);
+                    } else {
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 for (int i = 1; i <= 4; i++) {
                     if (pos.y - i >= 0 && boardChars[pos.y - i][pos.x] == '.') {
                         addToMoves(new Point(pos.x, pos.y - i), car, cars, moves);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
                 for (int i = 1; i <= 4; i++) {
-                    if (pos.y + car.getLength() + i <= 5 && boardChars[pos.y + car.getLength() + i ][pos.x] == '.'){
-                        addToMoves(new Point(pos.x, pos.y+i), car, cars, moves);
-                    }
-                    else {
+                    if (pos.y + car.getLength() + i <= 5 && boardChars[pos.y + car.getLength() + i][pos.x] == '.') {
+                        addToMoves(new Point(pos.x, pos.y + i), car, cars, moves);
+                    } else {
                         break;
                     }
                 }
@@ -160,6 +182,7 @@ public class RushHour {
 
     /**
      * equality comparison is required for hashsets
+     *
      * @param o the other object being compared
      * @return boolean denoting equality
      */
@@ -179,7 +202,7 @@ public class RushHour {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        for (var line: boardChars) {
+        for (var line : boardChars) {
             out.append(new String(line));
             out.append("\n");
         }
@@ -187,31 +210,9 @@ public class RushHour {
     }
 
     /**
-     * Helper function for RushHour.moves() above
-     * creates new car, from which it creates a list of cars, from which it creates a RushHour board and
-     * adds it to the provided ArrayList
-     * @param newPoint new position of the moved car
-     * @param car the car to be modified
-     * @param cars list of cars from the original board
-     * @param moves list of moves to which the newly constructed board is added
-     */
-    public static void addToMoves(Point newPoint, Car car, ArrayList<Car> cars, ArrayList<RushHour> moves) {
-        Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
-        ArrayList<Car> newCars = new ArrayList<>();
-        for (Car oldCar: cars) {
-            if (newCar.getColour() == oldCar.getColour()){
-                newCars.add(newCar);
-            }
-            else {
-                newCars.add(oldCar);
-            }
-        }
-        moves.add(new RushHour(newCars));
-    }
-
-    /**
      * Regenerates the array of characters symbolizing the playing board from positions, directions,
      * and orientations of the cars in the list of cars.
+     *
      * @return 6x6 char array representing the board
      */
     private char[][] generateBoardChars() {
@@ -284,33 +285,30 @@ public class RushHour {
     }
 
     /**
-     * @param endBoard      Board to end at
-     * @return              the step taken between this board and the end board
-     *                      Ex: ['X','R','1'] would mean X was moved to the right by 1
+     * @param endBoard Board to end at
+     * @return the step taken between this board and the end board
+     * Ex: ['X','R','1'] would mean X was moved to the right by 1
      */
     public char[] boardDiff(RushHour endBoard) {
         var step = new char[3];
         if (this.equals(endBoard)) throw new IllegalArgumentException();
-        for (int i = 0; i < this.cars.size(); i++){         //iterate through cars
+        for (int i = 0; i < this.cars.size(); i++) {         //iterate through cars
             Point startCarPos = this.cars.get(i).getPos();
             Point endCarPos = endBoard.cars.get(i).getPos();
             if (startCarPos != endCarPos) {                 //when the car that moved is found
                 step[0] = this.cars.get(i).getColour();     //determine which colour it is
                 if (endCarPos.x - startCarPos.x > 0) {      //determine by how much it moved and in which direction
                     step[1] = 'R';
-                    step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x)+'0');
-                }
-                else if (endCarPos.x - startCarPos.x < 0) {
+                    step[2] = (char) (Math.abs(endCarPos.x - startCarPos.x) + '0');
+                } else if (endCarPos.x - startCarPos.x < 0) {
                     step[1] = 'L';
-                    step[2] = (char)(Math.abs(endCarPos.x - startCarPos.x)+'0');
-                }
-                else if (endCarPos.y - startCarPos.y > 0) {
+                    step[2] = (char) (Math.abs(endCarPos.x - startCarPos.x) + '0');
+                } else if (endCarPos.y - startCarPos.y > 0) {
                     step[1] = 'D';
-                    step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y)+'0');
-                }
-                else if (endCarPos.y - startCarPos.y < 0) {
+                    step[2] = (char) (Math.abs(endCarPos.y - startCarPos.y) + '0');
+                } else if (endCarPos.y - startCarPos.y < 0) {
                     step[1] = 'U';
-                    step[2] = (char)(Math.abs(endCarPos.y - startCarPos.y)+'0');
+                    step[2] = (char) (Math.abs(endCarPos.y - startCarPos.y) + '0');
                 }
             }
         }

@@ -12,10 +12,11 @@ public class Car {
 
     /**
      * JBOD constructor for the Car class
-     * @param pos a point denoting the top left corner of the car
+     *
+     * @param pos         a point denoting the top left corner of the car
      * @param orientation as specified by the constants in RushHour.java
-     * @param length either 2 or 3
-     * @param colour a char denoting the name/colour of the car
+     * @param length      either 2 or 3
+     * @param colour      a char denoting the name/colour of the car
      */
     public Car(Point pos, int orientation, int length, char colour) {
         this.pos = pos;
@@ -50,6 +51,7 @@ public class Car {
 
     /**
      * equality comparison is required for hashsets
+     *
      * @param o the other object being compared
      * @return boolean denoting equality
      */
