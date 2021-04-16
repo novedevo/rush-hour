@@ -16,7 +16,12 @@ public class Solver {
         writeToFile(solve(a), output);
     }
 
-    //breadth-first search
+    /**
+     * breadth-first search, essentially
+     * solves the given puzzle board and outputs the steps needed
+     * @param board the puzzle board to be solved
+     * @return list of char arrays denoting the steps required to solve it
+     */
     public static ArrayList<char[]> solve(RushHour board) {
         var stepsArrayList = new ArrayList<char[]>();
         if (board.isSolved()) return stepsArrayList;    //if board is already solved, return an empty ArrayList
@@ -47,6 +52,11 @@ public class Solver {
         return null;
     }
 
+    /**
+     * writes an ArrayList of char arrays to the specified file, with newlines between each array.
+     * @param steps the ArrayList of char arrays to be written
+     * @param filename the location to write the file
+     */
     public static void writeToFile(ArrayList<char[]> steps, String filename) {
         try {
             var writer = new BufferedWriter(new FileWriter(filename));
