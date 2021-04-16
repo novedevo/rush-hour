@@ -2,19 +2,26 @@ package rushhour;
 
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.ArrayList; //storing the cars
+import java.util.HashSet; //storing the colours
+import java.util.Scanner; //reading from files
 
 public class RushHour {
+    // constants for cardinal directions
+    //this could also be accomplished with a boolean for verticality checking
+    //or an enum, for that matter
     public final static int UP = 0;
     public final static int DOWN = 2;
     public final static int LEFT = 1;
     public final static int RIGHT = 3;
 
+    //technically, this could probably work on boards of any size.
+    //functionality not guaranteed!
     public final static int SIZE = 6;
 
+    //stores the SIZE*SIZE char array representation of the board
     private final char[][] boardChars;
+    //keeps track of the canonical list of cars composing the board
     private final ArrayList<Car> cars;
 
     /**
@@ -24,7 +31,7 @@ public class RushHour {
      */
     private RushHour(ArrayList<Car> newCars) {
         this.cars = newCars;
-        this.boardChars = generateBoardChars();
+        this.boardChars = generateBoardChars(newCars);
     }
 
     /**
@@ -35,7 +42,7 @@ public class RushHour {
     public RushHour(String fileName) throws Exception {
 
         Scanner boardScanner = new Scanner(new File(fileName));
-        boardChars = new char[SIZE][SIZE];
+        boardChars = new char[SIZE][SIZE]; //allocate / initialize array
         cars = new ArrayList<>();
 
         HashSet<Character> colours = new HashSet<>();
@@ -44,7 +51,8 @@ public class RushHour {
         //copy each line of the puzzle file into our char array
         int lineIndex = 0;
         do {
-            boardChars[lineIndex] = (boardScanner.nextLine().toCharArray());
+            boardChars[lineIndex] = (boardScanner.nextLine().toCharArray()); //this could fail if the board is
+            // improperly formatted, in which case it would throw an exception
             lineIndex++;
         } while (boardScanner.hasNext());
 
@@ -63,11 +71,9 @@ public class RushHour {
                     int length = determineLength(pos, orientation, boardChars);
 
                     cars.add(new Car(pos, orientation, length, colour));
-
                 }
             }
         }
-
     }
 
     /**
@@ -77,6 +83,7 @@ public class RushHour {
      *               Modifies the given point to be *length* units further in the given direction
      */
     public static void movePoint(Point pt, int dir, int length) {
+        //this utility helper function is a glorified switch
         switch (dir) {
             case UP: {
                 pt.translate(0, -length);
@@ -110,11 +117,11 @@ public class RushHour {
      * @param moves    list of moves to which the newly constructed board is added
      */
     public static void addToMoves(Point newPoint, Car car, ArrayList<Car> cars, ArrayList<RushHour> moves) {
-        Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour());
+        Car newCar = new Car(newPoint, car.getOrientation(), car.getLength(), car.getColour()); //create the new car
         ArrayList<Car> newCars = new ArrayList<>();
         for (Car oldCar : cars) {
             if (newCar.getColour() == oldCar.getColour()) {
-                newCars.add(newCar);
+                newCars.add(newCar); //swaps the car in place for the new one
             } else {
                 newCars.add(oldCar);
             }
@@ -143,13 +150,13 @@ public class RushHour {
      */
     public ArrayList<RushHour> moves() {
         ArrayList<RushHour> moves = new ArrayList<>();
-        for (Car car : cars) {
+        for (Car car : cars) { //we need to check all possible moves for each individual car
             var pos = car.getPos();
-            if (car.getOrientation() == RIGHT) {
+            if (car.getOrientation() == RIGHT) {  //a.k.a. horizontal
                 for (int i = 1; i <= 4; i++) {
-                    if (pos.x - i >= 0 && boardChars[pos.y][pos.x - i] == '.') {
+                    if (pos.x - i >= 0 && boardChars[pos.y][pos.x - i] == '.') { //if there is room to move in this direction
                         addToMoves(new Point(pos.x - i, pos.y), car, cars, moves);
-                    } else {
+                    } else { //there is a car or wall in the way, this direction is finished
                         break;
                     }
                 }
@@ -160,7 +167,7 @@ public class RushHour {
                         break;
                     }
                 }
-            } else {
+            } else { //a.k.a. vertical
                 for (int i = 1; i <= 4; i++) {
                     if (pos.y - i >= 0 && boardChars[pos.y - i][pos.x] == '.') {
                         addToMoves(new Point(pos.x, pos.y - i), car, cars, moves);
@@ -213,9 +220,9 @@ public class RushHour {
      * Regenerates the array of characters symbolizing the playing board from positions, directions,
      * and orientations of the cars in the list of cars.
      *
-     * @return 6x6 char array representing the board
+     * @return SIZE*SIZE char array representing the board
      */
-    private char[][] generateBoardChars() {
+    private char[][] generateBoardChars(ArrayList<Car> cars) {
         var tempBoard = new char[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             tempBoard[i] = "......".toCharArray(); //initialize as empty board
@@ -245,7 +252,7 @@ public class RushHour {
 
         if (pos.y == SIZE - 1) {
             return RIGHT; //at bottom layer; guards against index out of bounds exceptions
-        } else if (tempChars[pos.y + 1][pos.x] == colour) {
+        } else if (tempChars[pos.y + 1][pos.x] == colour) { //if the cell directly below us is the same colour, we are vertical
             return DOWN;
         } else return RIGHT;
 
@@ -263,6 +270,9 @@ public class RushHour {
 
         int length = 0;
 
+        //since we only deal with 2,3 length cars, this could be simplified
+        //but this implementation is more general
+
         while (true) {
 
             movePoint(pt, orientation, 1);
@@ -274,10 +284,7 @@ public class RushHour {
                 break;
             }
 
-            if (squareColour != colour) //hit another car or empty space
-            {
-                break;
-            }
+            if (squareColour != colour) break;//hit another car or empty space
 
             length++;
         }
@@ -290,7 +297,7 @@ public class RushHour {
      * Ex: ['X','R','1'] would mean X was moved to the right by 1
      */
     public char[] boardDiff(RushHour endBoard) {
-        var step = new char[3];
+        char[] step = new char[3];
         if (this.equals(endBoard)) throw new IllegalArgumentException();
         for (int i = 0; i < this.cars.size(); i++) {         //iterate through cars
             Point startCarPos = this.cars.get(i).getPos();

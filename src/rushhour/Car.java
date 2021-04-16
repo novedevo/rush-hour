@@ -27,7 +27,7 @@ public class Car {
 
 
     //getters, no setters. this is an immutable class.
-    //perhaps you also have some experience teaching classes which are overly loud
+    //perhaps you also have some experience teaching classes which are overly loud!
 
     public final int getOrientation() {
         return orientation;

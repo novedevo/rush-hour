@@ -11,6 +11,7 @@ public class Solver {
         try {
             a = new RushHour(input);
         } catch (Exception e) {
+            e.printStackTrace();
             return;
         }
         writeToFile(solve(a), output);
@@ -77,7 +78,7 @@ public class Solver {
             }
             writer.flush();
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException e) { //could be a nonexistent directory, etc.
             e.printStackTrace();
         }
     }
