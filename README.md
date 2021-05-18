@@ -40,13 +40,13 @@ Our `multiTest()` benchmarking function spawns an `Executor` threadpool and runs
 
 
 ## Rust
-We also wrote a version of this project in the Rust programming language, which is included (with its own documentation) in its own folder. This side project was an excellent way to learn Rust, and much unnecessary (yet enjoyable) optimization occurred there.
+We also wrote a [version of this project](https://github.com/novedevo/rust-hour) in the Rust programming language (with its own documentation). This side project was an excellent way to learn Rust, and much unnecessary (yet enjoyable) optimization occurred there.
 
 
 ## Conclusions and Lessons Learned
 - Concurrency is powerful
 - Challenge your assumptions. A* should have been better, but the heuristic calculations offset its theoretical performance.
 - Remote collaboration is non-trivial but very useful
-- While Intellij is undoubtedly the best IDE for Java (other than Eclipse, of course), its "Code with Me" feature is still too early for us to use effectively
+- While IntelliJ is undoubtedly the best IDE for Java (other than Eclipse, of course), its "Code with Me" feature is still too early for us to use effectively
 - VS Code's plugin ecosystem makes it a serious rival to even the most well-featured IDE
 - Rust is extremely fast
